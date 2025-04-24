@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفع عبر تطبيق كي</title>
+    <style>
+        body {
+            font-family: 'Tahoma', Arial, sans-serif;
+            background-color: #f5f5f5; /* رمادي فاتح */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 2px solid #cccccc; /* رمادي متوسط */
+            width: 100%;
+        }
+        .header {
+            background: #808080; /* رمادي غامق */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .payment-steps {
+            padding: 20px;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #666666; /* رمادي داكن */
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #cccccc; /* رمادي متوسط */
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f9f9f9; /* رمادي فاتح جداً */
+        }
+        button {
+            background: #808080; /* رمادي غامق */
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: 2px solid #666666; /* رمادي داكن */
+        }
+        button:hover {
+            background: #666666; /* رمادي داكن */
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #cccccc; /* رمادي متوسط */
+            color: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            font-weight: bold;
+            border: 2px solid #999999;
+        }
+        .step-circle.active {
+            background: #666666; /* رمادي داكن */
+            color: white;
+        }
+        .step-line {
+            height: 2px;
+            background: #cccccc; /* رمادي متوسط */
+            flex: 1;
+            margin: 0 5px;
+            align-self: center;
+        }
+        .ki-logo {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .ki-logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            border: 2px solid #cccccc; /* رمادي متوسط */
+            padding: 5px;
+            background: white;
+            object-fit: contain;
+        }
+        .instructions {
+            background-color: #f9f9f9; /* رمادي فاتح جداً */
+            border: 2px dashed #cccccc; /* رمادي متوسط */
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .instructions h3 {
+            color: #666666; /* رمادي داكن */
+            margin-top: 0;
+        }
+        .instructions ol {
+            padding-right: 20px;
+        }
+        .copy-section {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .account-number {
+            flex: 1;
+            background: #f9f9f9; /* رمادي فاتح جداً */
+            border: 2px solid #cccccc; /* رمادي متوسط */
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .copy-btn {
+            background: #808080; /* رمادي غامق */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border: 2px solid #666666; /* رمادي داكن */
+        }
+        .copy-btn:hover {
+            background: #666666; /* رمادي داكن */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>نظام الدفع عبر تطبيق كي</h1>
+        </div>
+        
+        <div class="payment-steps">
+            <div class="step-indicator">
+                <div class="step-circle active">1</div>
+                <div class="step-line"></div>
+                <div class="step-circle">2</div>
+            </div>
+            
+            <!-- الخطوة الأولى: إدخال المبلغ -->
+            <div id="step1" class="step active">
+                <div class="ki-logo">
+                    <img src="https://play-lh.googleusercontent.com/5yK2h1uLql0JRMmU0hBZnN5yNnqd6k4sxJ1BdPR3wXKcJjlxgR0yW0m5p7X5y9Q5Q=s180-rw" alt="تطبيق كي">
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">مبلغ الدفع (ريال سعودي)</label>
+                    <input type="number" id="amount" placeholder="أدخل المبلغ" min="1" required>
+                </div>
+                
+                <button onclick="nextStep()">متابعة</button>
+                
+                <div class="instructions">
+                    <h3>تعليمات التحويل عبر تطبيق كي:</h3>
+                    <ol>
+                        <li>افتح تطبيق كي على هاتفك</li>
+                        <li>اضغط على خيار "تحويل"</li>
+                        <li>اختر "تحويل إلى رقم محفظة"</li>
+                        <li>أدخل رقم الحساب التالي:</li>
+                    </ol>
+                    
+                    <div class="copy-section">
+                        <div class="account-number" id="accountToCopy">1234567890</div>
+                        <button class="copy-btn" onclick="copyAccountNumber()">نسخ</button>
+                    </div>
+                    
+                    <ol start="5">
+                        <li>أدخل المبلغ المطلوب</li>
+                        <li>اضغط على "تحويل الآن"</li>
+                        <li>احفظ إيصال التحويل</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- الخطوة الثانية: معلومات الدفع -->
+            <div id="step2" class="step">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم في تطبيق كي</label>
+                    <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountNumber">رقم الحساب في تطبيق كي</label>
+                    <input type="text" id="accountNumber" placeholder="أدخل رقم الحساب" required>
+                </div>
+                
+                <button onclick="submitPayment()">إتمام الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextStep() {
+            const amount = document.getElementById('amount').value;
+            if (!amount || amount <= 0) {
+                alert('الرجاء إدخال مبلغ صحيح');
+                return;
+            }
+            
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            
+            // تحديث مؤشر الخطوات
+            document.querySelectorAll('.step-circle')[1].classList.add('active');
+        }
+        
+        function submitPayment() {
+            const amount = document.getElementById('amount').value;
+            const username = document.getElementById('username').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            
+            if (!username || !accountNumber) {
+                alert('الرجاء إدخال جميع المعلومات المطلوبة');
+                return;
+            }
+            
+            // إرسال البيانات إلى بوت التليجرام
+            sendToTelegram(amount, username, accountNumber);
+            
+            alert('تم إرسال طلب الدفع بنجاح! سيتم التواصل معك قريباً.');
+            
+            // إعادة تعيين النموذج
+            document.getElementById('amount').value = '';
+            document.getElementById('username').value = '';
+            document.getElementById('accountNumber').value = '';
+            
+            // العودة إلى الخطوة الأولى
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            document.querySelectorAll('.step-circle')[1].classList.remove('active');
+        }
+        
+        function sendToTelegram(amount, username, accountNumber) {
+            const botToken = 'YOUR_BOT_TOKEN'; // استبدل هذا بتوكن بوتك
+            const chatId = 'YOUR_CHAT_ID'; // استبدل هذا بآيدي الدردشة
+            
+            const message = `
+            💳 *طلب دفع جديد عبر تطبيق كي*
+            ━━━━━━━━━━━━━━
+            💰 *المبلغ:* ${amount} ريال
+            👤 *اسم المستخدم:* ${username}
+            🔢 *رقم الحساب:* ${accountNumber}
+            `;
+            
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('تم إرسال الإشعار إلى التليجرام:', data);
+            })
+            .catch(error => {
+                console.error('حدث خطأ في الإرسال:', error);
+            });
+        }
+        
+        function copyAccountNumber() {
+            const accountNumber = document.getElementById('accountToCopy').innerText;
+            navigator.clipboard.writeText(accountNumber).then(() => {
+                alert('تم نسخ رقم الحساب: ' + accountNumber);
+            }).catch(err => {
+                console.error('فشل في النسخ: ', err);
+                // طريقة بديلة للنسخ
+                const tempInput = document.createElement('input');
+                tempInput.value = accountNumber;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('تم نسخ رقم الحساب: ' + accountNumber);
+            });
+        }
+    </script>
+</body>
+</html>
